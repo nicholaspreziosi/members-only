@@ -15,7 +15,7 @@
         Members Only Forum
       </h1>
       <section
-        class="md:min-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
+        class="md:min-w-[500px] md:max-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
       >
         <h2 class="text-xl md:text-2xl">Sign Up</h2>
         <form action="" method="POST" class="flex flex-col gap-y-6 w-full">
@@ -100,6 +100,21 @@
           >
             Sign Up
           </button>
+
+          <% if (typeof userExists !== `undefined` || typeof errors !==
+          `undefined`) { %>
+          <ul class="text-red-600 font-semi-bold">
+            <% if (typeof userExists !== `undefined`) { %>
+            <li class="list-disc list-outside ml-3 md:ml-4">
+              Email already associated with another account... Please use
+              another email
+            </li>
+            <% } %> <% if (typeof errors !== `undefined`) { %> <% for (item of
+            errors) { %>
+            <li class="list-disc list-outside ml-3 md:ml-4"><%= item.msg %></li>
+            <% } %> <% } %>
+          </ul>
+          <% } %>
         </form>
 
         <div class="w-full border-slate-500 border-t"></div>

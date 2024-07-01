@@ -36,14 +36,14 @@
           <div class="flex flex-col gap-y-2">
             <label for="email">Email</label>
             <input
-              class="px-4 py-2 border border-slate-500 rounded-lg"
+              class="px-4 py-2 border border-slate-500 rounded-lg disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500"
               required
               autocomplete="off"
               name="email"
               placeholder="Email"
               type="email"
               value="<%= typeof user.email === `undefined` ? `` : user.email %>"
-              disabled
+              disabled="true"
             />
           </div>
 
@@ -73,6 +73,13 @@
                 Save
               </button>
             </div>
+            <% if (typeof firstNameErrors !== `undefined`) { %>
+            <ul class="text-red-600 font-semi-bold">
+              <% for (item of firstNameErrors) { %>
+              <li><%= item.msg %></li>
+              <% } %>
+            </ul>
+            <% } %>
           </form>
 
           <form
@@ -101,10 +108,17 @@
                 Save
               </button>
             </div>
+            <% if (typeof lastNameErrors !== `undefined`) { %>
+            <ul class="text-red-600 font-semi-bold">
+              <% for (item of lastNameErrors) { %>
+              <li><%= item.msg %></li>
+              <% } %>
+            </ul>
+            <% } %>
           </form>
 
           <form
-            action="/member"
+            action="/account/member"
             method="post"
             class="relative flex flex-col gap-y-2"
           >
@@ -136,11 +150,13 @@
                   >Member Password:
                 </label>
                 <input
+                  required
+                  autocomplete="off"
                   class="w-full px-4 py-2 border border-slate-500 rounded-lg"
                   id="member-password"
                   name="member-password"
                   placeholder="Member Password"
-                  type="text"
+                  type="password"
                 />
               </div>
 
@@ -152,10 +168,17 @@
                 Save
               </button>
             </div>
+            <% if (typeof memberErrors !== `undefined`) { %>
+            <ul class="text-red-600 font-semi-bold">
+              <% for (item of memberErrors) { %>
+              <li><%= item.msg %></li>
+              <% } %>
+            </ul>
+            <% } %>
           </form>
 
           <form
-            action="/admin"
+            action="/account/admin"
             method="post"
             class="<%= user.member ? `` : `hidden` %> relative flex flex-col gap-y-2"
           >
@@ -187,11 +210,13 @@
                   >Admin Password:
                 </label>
                 <input
+                  required
+                  autocomplete="off"
                   class="w-full px-4 py-2 border border-slate-500 rounded-lg"
                   id="admin-password"
                   name="admin-password"
                   placeholder="Admin Password"
-                  type="text"
+                  type="password"
                 />
               </div>
 
@@ -203,6 +228,13 @@
                 Save
               </button>
             </div>
+            <% if (typeof adminErrors !== `undefined`) { %>
+            <ul class="text-red-600 font-semi-bold">
+              <% for (item of adminErrors) { %>
+              <li><%= item.msg %></li>
+              <% } %>
+            </ul>
+            <% } %>
           </form>
         </div>
       </section>
@@ -232,32 +264,6 @@
         </div>
         <button type="submit">Save</button>
       </form>
-
-      <form
-        action="/admin"
-        method="post"
-        class="<%= user.member ? `` : `hidden` %> flex items-center gap-x-4"
-      >
-        <label for="admin">Admin:</label>
-        <input
-          value="<%= user.admin  %>"
-          class="hidden"
-          id="admin"
-          name="admin"
-          type="text"
-        />
-        <img
-          id="admin-toggle"
-          class="w-12 h-auto cursor-pointer"
-          src="<%= user.admin ? `/images/toggle.svg` : `/images/toggle-off.svg` %>"
-        />
-        <div class="hidden" id="admin-password-container">
-          <label for="admin-password">Admin Password: </label>
-          <input id="admin-password" name="admin-password" type="text" />
-        </div>
-
-        <button id="admin-submit" class="hidden" type="submit">Save</button>
-      </form>
     </div>
 
     <% } else { %>
@@ -268,7 +274,7 @@
         Members Only Forum
       </h1>
       <section
-        class="md:min-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
+        class="md:min-w-[500px] md:max-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
       >
         <h2 class="text-xl md:text-2xl">Log In</h2>
         <form
