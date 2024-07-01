@@ -446,6 +446,24 @@ video {
   display: none;
 }
 
+@font-face {
+  font-family: "figtree";
+
+  src: url(../fonts/figtree.ttf);
+}
+
+@font-face {
+  font-family: "inter";
+
+  src: url(../fonts/inter.ttf);
+}
+
+@font-face {
+  font-family: "nunito";
+
+  src: url(../fonts/nunito_sans.ttf);
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -572,6 +590,14 @@ video {
 
 .right-2 {
   right: 0.5rem;
+}
+
+.right-\[90px\] {
+  right: 90px;
+}
+
+.top-\[64px\] {
+  top: 64px;
 }
 
 .m-6 {
@@ -816,6 +842,14 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.font-figtree {
+  font-family: figtree, sans-serif;
+}
+
+.font-inter {
+  font-family: inter, sans-serif;
 }
 
 .text-2xl {

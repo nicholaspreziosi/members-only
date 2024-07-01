@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link href="/stylesheets/output.css" rel="stylesheet" />
+    <link href="/stylesheets/custom.css" rel="stylesheet" />
     <script src="/javascripts/account.js" defer></script>
     <script src="/javascripts/log-in.js" defer></script>
   </head>
-  <body class="p-0 text-slate-700 bg-slate-100">
+  <body class="p-0 text-slate-700 bg-slate-100 font-figtree">
     <% if (typeof user !== `undefined`) {%>
 
     <nav
@@ -162,6 +163,11 @@
                   placeholder="Member Password"
                   type="password"
                 />
+                <img
+                  id="toggle-member-pw-visbility"
+                  class="absolute top-[64px] right-[90px] w-6 cursor-pointer"
+                  src="/images/eye.svg"
+                />
               </div>
 
               <button
@@ -223,6 +229,11 @@
                   name="admin-password"
                   placeholder="Admin Password"
                   type="password"
+                />
+                <img
+                  id="toggle-admin-pw-visbility"
+                  class="absolute top-[64px] right-[90px] w-6 cursor-pointer"
+                  src="/images/eye.svg"
                 />
               </div>
 

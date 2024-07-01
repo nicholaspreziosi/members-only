@@ -101,3 +101,45 @@ const toggleLastName = () => {
 
 firstNameInput.addEventListener("input", toggleFirstName);
 lastNameInput.addEventListener("input", toggleLastName);
+
+// TOGGLE MEMBER PASSWORD VISIBILITY
+const memberPasswordInput = document.querySelector("#member-password");
+const toggleMemberVisibilityIcon = document.querySelector(
+  "#toggle-member-pw-visbility"
+);
+
+const toggleMemberPasswordVisbility = () => {
+  if (memberPasswordInput.type === "password") {
+    memberPasswordInput.type = "text";
+    toggleMemberVisibilityIcon.src = "/images/eye-off.svg";
+  } else {
+    memberPasswordInput.type = "password";
+    toggleMemberVisibilityIcon.src = "/images/eye.svg";
+  }
+};
+
+toggleMemberVisibilityIcon.addEventListener(
+  "click",
+  toggleMemberPasswordVisbility
+);
+
+// TOGGLE ADMIN PASSWORD VISIBILITY
+const adminPasswordInput = document.querySelector("#admin-password");
+const toggleAdminVisibilityIcon = document.querySelector(
+  "#toggle-admin-pw-visbility"
+);
+
+const toggleAdminPasswordVisbility = () => {
+  if (adminPasswordInput.type === "password") {
+    adminPasswordInput.type = "text";
+    toggleAdminVisibilityIcon.src = "/images/eye-off.svg";
+  } else {
+    adminPasswordInput.type = "password";
+    toggleAdminVisibilityIcon.src = "/images/eye.svg";
+  }
+};
+
+toggleAdminVisibilityIcon.addEventListener(
+  "click",
+  toggleAdminPasswordVisbility
+);
