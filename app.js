@@ -43,7 +43,13 @@ app.get("/posts", async (req, res) => {
 });
 
 // Handle get request on sign up page
-app.get("/sign-up", (req, res) => res.render("sign-up-form"));
+app.get("/sign-up", (req, res) => {
+  if (req.user) {
+    res.redirect("posts");
+  } else {
+    res.render("sign-up-form");
+  }
+});
 
 // Handle post request on sign up page
 app.post("/sign-up", async (req, res, next) => {
