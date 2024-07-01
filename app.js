@@ -200,24 +200,50 @@ app.get("/posts/create", (req, res, next) => {
 });
 
 // Handle post request on sign up page
-app.post("/posts/create", async (req, res, next) => {
-  try {
-    const post = new Post({
-      title: req.body.title,
-      message: req.body.message,
-      time: Date.now(),
-      author: req.user.id,
-    });
-    const result = await post.save();
-    res.redirect("/posts");
-  } catch (err) {
-    return next(err);
-  }
-});
+app.post("/posts/create", [
+  // Validate and sanitize the fields.
+  body(
+    "title",
+    "Title must contain at least 2 characters and no more than 200 characters"
+  )
+    .trim()
+    .isLength({ min: 2, max: 200 })
+    .escape(),
+  body(
+    "message",
+    "Message must contain at least 2 characters and no more than 1000 characters"
+  )
+    .trim()
+    .isLength({ min: 2, max: 1000 })
+    .escape(),
+
+  async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("post-form", {
+        user: req.user,
+        title: req.body.title,
+        message: req.body.message,
+        errors: errors.array(),
+      });
+    } else {
+      const post = new Post({
+        title: req.body.title,
+        message: req.body.message,
+        time: Date.now(),
+        author: req.user.id,
+      });
+      const result = await post.save();
+      res.redirect("/posts");
+    }
+  },
+]);
 
 // Handle post request on account page for first name update
 app.post("/update/first-name", [
-  // Validate and sanitize the name field.
+  // Validate and sanitize the first name field.
   body("first_name", "First name must contain at least 2 characters")
     .trim()
     .isLength({ min: 2, max: 35 })
@@ -245,7 +271,7 @@ app.post("/update/first-name", [
 
 // Handle post request on account page for last name update
 app.post("/update/last-name", [
-  // Validate and sanitize the name field.
+  // Validate and sanitize the last name field.
   body("last_name", "Last name must contain at least 2 characters")
     .trim()
     .isLength({ min: 2, max: 35 })

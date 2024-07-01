@@ -76,7 +76,9 @@
             <% if (typeof firstNameErrors !== `undefined`) { %>
             <ul class="text-red-600 font-semi-bold">
               <% for (item of firstNameErrors) { %>
-              <li><%= item.msg %></li>
+              <li class="list-disc list-outside ml-3 md:ml-4">
+                <%= item.msg %>
+              </li>
               <% } %>
             </ul>
             <% } %>
@@ -111,7 +113,9 @@
             <% if (typeof lastNameErrors !== `undefined`) { %>
             <ul class="text-red-600 font-semi-bold">
               <% for (item of lastNameErrors) { %>
-              <li><%= item.msg %></li>
+              <li class="list-disc list-outside ml-3 md:ml-4">
+                <%= item.msg %>
+              </li>
               <% } %>
             </ul>
             <% } %>
@@ -171,7 +175,9 @@
             <% if (typeof memberErrors !== `undefined`) { %>
             <ul class="text-red-600 font-semi-bold">
               <% for (item of memberErrors) { %>
-              <li><%= item.msg %></li>
+              <li class="list-disc list-outside ml-3 md:ml-4">
+                <%= item.msg %>
+              </li>
               <% } %>
             </ul>
             <% } %>
@@ -231,7 +237,9 @@
             <% if (typeof adminErrors !== `undefined`) { %>
             <ul class="text-red-600 font-semi-bold">
               <% for (item of adminErrors) { %>
-              <li><%= item.msg %></li>
+              <li class="list-disc list-outside ml-3 md:ml-4">
+                <%= item.msg %>
+              </li>
               <% } %>
             </ul>
             <% } %>

@@ -74,8 +74,9 @@
                 name="message"
                 placeholder="Message"
                 type="textarea"
-                value="<%= typeof message === `undefined` ? `` : message %>"
-              ></textarea>
+              >
+<%= typeof message === `undefined` ? `` : message %></textarea
+              >
             </div>
 
             <button
@@ -84,6 +85,14 @@
             >
               Submit
             </button>
+            <ul class="text-red-600 font-semi-bold">
+              <% if (typeof errors !== `undefined`) { %> <% for (item of errors)
+              { %>
+              <li class="list-disc list-outside ml-3 md:ml-4">
+                <%= item.msg %>
+              </li>
+              <% } %> <% } %>
+            </ul>
           </form>
         </section>
       </div>
