@@ -48,7 +48,7 @@
           class="md:min-w-[700px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
         >
           <form
-            action="/log-in"
+            action="/posts/create"
             method="POST"
             class="flex flex-col gap-y-6 w-full"
           >
@@ -79,7 +79,8 @@
             </div>
 
             <button
-              class="px-4 py-2 border border-slate-500 rounded-lg hover:bg-slate-500 hover:text-white transition"
+              type="submit"
+              class="px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition"
             >
               Submit
             </button>

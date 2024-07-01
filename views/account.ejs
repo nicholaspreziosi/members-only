@@ -156,7 +156,7 @@
           <form
             action="/admin"
             method="post"
-            class="relative flex flex-col gap-y-2"
+            class="<%= user.member ? `` : `hidden` %> relative flex flex-col gap-y-2"
           >
             <div class="w-full flex flex-row justify-between items-center">
               <label for="admin">Admin:</label>

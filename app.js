@@ -199,6 +199,12 @@ app.post("/admin", async (req, res, next) => {
   res.redirect("/account");
 });
 
+// Handle post request on post delete
+app.post("/delete/:id", async (req, res, next) => {
+  const post = await Post.findByIdAndDelete(req.params.id);
+  res.redirect("/posts");
+});
+
 // Handle log in
 app.post(
   "/log-in",

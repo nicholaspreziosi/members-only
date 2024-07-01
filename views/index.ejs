@@ -61,7 +61,10 @@
                 </p>
                 <p><%= item.formattedDateTime %></p>
                 <% if (user.admin) {%>
-                <a>Delete</a>
+                  <form action="/delete/<%= item.id %>" method="post">
+                    <input type="hidden" name="<%= item.id %>" value="<%= item.id %>" />
+                    <button type="submit">Delete</button>
+                  </form>
                 <%}%>
               </div>
             </div>
