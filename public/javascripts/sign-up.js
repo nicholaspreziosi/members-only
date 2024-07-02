@@ -1,30 +1,25 @@
+// PASSWORD VISIBILITY TOGGLE FUNCTION
+const togglePasswordVisibility = (inputElem, iconElem) => {
+  if (inputElem.type === "password") {
+    inputElem.type = "text";
+    iconElem.src = "/images/eye-off.svg";
+  } else {
+    inputElem.type = "password";
+    iconElem.src = "/images/eye.svg";
+  }
+};
+
 const passwordInput = document.querySelector("#password");
 const confirmInput = document.querySelector("#confirm");
 const togglePwIcon = document.querySelector("#toggle-pw");
 const toggleConfirmIcon = document.querySelector("#toggle-confirm");
 
-const togglePassword = () => {
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    togglePwIcon.src = "/images/eye-off.svg";
-  } else {
-    passwordInput.type = "password";
-    togglePwIcon.src = "/images/eye.svg";
-  }
-};
-
-const toggleConfirm = () => {
-  if (confirmInput.type === "password") {
-    confirmInput.type = "text";
-    toggleConfirmIcon.src = "/images/eye-off.svg";
-  } else {
-    confirmInput.type = "password";
-    toggleConfirmIcon.src = "/images/eye.svg";
-  }
-};
-
-togglePwIcon.addEventListener("click", togglePassword);
-toggleConfirmIcon.addEventListener("click", toggleConfirm);
+togglePwIcon.addEventListener("click", () => {
+  togglePasswordVisibility(passwordInput, togglePwIcon);
+});
+toggleConfirmIcon.addEventListener("click", () => {
+  togglePasswordVisibility(confirmInput, toggleConfirmIcon);
+});
 
 // PASSWORD VALIDATION
 const comparePasswords = () => {

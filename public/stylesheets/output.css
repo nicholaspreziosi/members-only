@@ -600,6 +600,14 @@ video {
   top: 64px;
 }
 
+.bottom-2 {
+  bottom: 0.5rem;
+}
+
+.bottom-10 {
+  bottom: 2.5rem;
+}
+
 .m-6 {
   margin: 1.5rem;
 }

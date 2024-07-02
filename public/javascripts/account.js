@@ -86,26 +86,26 @@ const toggleLastName = () => {
 firstNameInput.addEventListener("input", toggleFirstName);
 lastNameInput.addEventListener("input", toggleLastName);
 
+// PASSWORD VISIBILITY TOGGLE FUNCTION
+const togglePasswordVisibility = (inputElem, iconElem) => {
+  if (inputElem.type === "password") {
+    inputElem.type = "text";
+    iconElem.src = "/images/eye-off.svg";
+  } else {
+    inputElem.type = "password";
+    iconElem.src = "/images/eye.svg";
+  }
+};
+
 // TOGGLE MEMBER PASSWORD VISIBILITY
 const memberPasswordInput = document.querySelector("#member-password");
 const toggleMemberVisibilityIcon = document.querySelector(
   "#toggle-member-pw-visbility"
 );
 
-const toggleMemberPasswordVisbility = () => {
-  if (memberPasswordInput.type === "password") {
-    memberPasswordInput.type = "text";
-    toggleMemberVisibilityIcon.src = "/images/eye-off.svg";
-  } else {
-    memberPasswordInput.type = "password";
-    toggleMemberVisibilityIcon.src = "/images/eye.svg";
-  }
-};
-
-toggleMemberVisibilityIcon.addEventListener(
-  "click",
-  toggleMemberPasswordVisbility
-);
+toggleMemberVisibilityIcon.addEventListener("click", () => {
+  togglePasswordVisibility(memberPasswordInput, toggleMemberVisibilityIcon);
+});
 
 // TOGGLE ADMIN PASSWORD VISIBILITY
 const adminPasswordInput = document.querySelector("#admin-password");
@@ -113,26 +113,37 @@ const toggleAdminVisibilityIcon = document.querySelector(
   "#toggle-admin-pw-visbility"
 );
 
-const toggleAdminPasswordVisbility = () => {
-  if (adminPasswordInput.type === "password") {
-    adminPasswordInput.type = "text";
-    toggleAdminVisibilityIcon.src = "/images/eye-off.svg";
-  } else {
-    adminPasswordInput.type = "password";
-    toggleAdminVisibilityIcon.src = "/images/eye.svg";
-  }
-};
+toggleAdminVisibilityIcon.addEventListener("click", () => {
+  togglePasswordVisibility(adminPasswordInput, toggleAdminVisibilityIcon);
+});
 
-toggleAdminVisibilityIcon.addEventListener(
-  "click",
-  toggleAdminPasswordVisbility
-);
-
-// CHANGE PASSWORD FUNCIONALITY
-const savePasswordBtn = document.querySelector("#save-password");
+// TOGGLE CHANGE PASSWORD VISIBILITY
 const oldPasswordInput = document.querySelector("#old-password");
 const newPasswordInput = document.querySelector("#new-password");
 const confirmPasswordInput = document.querySelector("#confirm-password");
+
+const toggleOldVisbilityIcon = document.querySelector(
+  "#toggle-old-pw-visbility"
+);
+const toggleNewVisbilityIcon = document.querySelector(
+  "#toggle-new-pw-visbility"
+);
+const toggleConfirmVisbilityIcon = document.querySelector(
+  "#toggle-confirm-pw-visbility"
+);
+
+toggleOldVisbilityIcon.addEventListener("click", () => {
+  togglePasswordVisibility(oldPasswordInput, toggleOldVisbilityIcon);
+});
+toggleNewVisbilityIcon.addEventListener("click", () => {
+  togglePasswordVisibility(newPasswordInput, toggleNewVisbilityIcon);
+});
+toggleConfirmVisbilityIcon.addEventListener("click", () => {
+  togglePasswordVisibility(confirmPasswordInput, toggleConfirmVisbilityIcon);
+});
+
+// CHANGE PASSWORD FUNCIONALITY
+const savePasswordBtn = document.querySelector("#save-password");
 
 const togglePasswordSave = () => {
   if (savePasswordBtn.disabled === true) {
