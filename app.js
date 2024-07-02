@@ -68,14 +68,12 @@ app.post("/sign-up", [
     .escape(),
   body(
     "password",
-    "Password must be at least 8 characters and have one uppercase letter, one lowercase letter, and one special character"
+    "Password must be at least 8 characters and have one uppercase letter, one lowercase letter, one number, and one special character"
   ).matches(/^(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/),
   body(
     "confirm",
     "Passwords don't match... Please check password fields"
   ).custom((value, { req, loc, path }) => {
-    console.log(value);
-    console.log(req.body.password);
     if (value !== req.body.password) {
       // trow error if passwords do not match
       throw new Error("Passwords don't match... Please check password fields");
@@ -298,7 +296,60 @@ app.post("/update/last-name", [
 ]);
 
 // Handle post request on account page for change password upate
-app.post("/update-password", async (req, res, next) => {});
+app.post("/update-password", [
+  body(
+    "newPassword",
+    "New password must be at least 8 characters and have one uppercase letter, one lowercase letter, one number, and one special character"
+  ).matches(/^(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/),
+  body(
+    "confirm",
+    "Passwords don't match... Please check new password and confirm fields"
+  ).custom((value, { req, loc, path }) => {
+    if (value !== req.body.newPassword) {
+      // trow error if passwords do not match
+      throw new Error(
+        "Passwords don't match... Please check new password and confirm fields"
+      );
+    } else {
+      return value;
+    }
+  }),
+
+  async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const user = await User.findById(req.user.id);
+    const match = await bcrypt.compare(req.body.password, user.password);
+
+    if (errors.isEmpty() && match) {
+      bcrypt.hash(req.body.newPassword, 10, async (err, hashedPassword) => {
+        // if err, do something
+        if (err) {
+          res.redirect("/sign-up");
+          return;
+        }
+        // otherwise, store hashedPassword in DB
+        else {
+          try {
+            user.password = hashedPassword;
+            await user.save();
+            res.redirect("/account");
+          } catch (err) {
+            return done(err);
+          }
+        }
+      });
+      return;
+    } else {
+      res.render("account", {
+        user: req.user,
+        passwordErrors: errors.array(),
+        passwordMatch: match,
+      });
+    }
+  },
+]);
 
 // Handle post request on account page for member update
 app.post("/account/member", [

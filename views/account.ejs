@@ -9,7 +9,7 @@
     <script src="/javascripts/account.js" defer></script>
     <script src="/javascripts/log-in.js" defer></script>
   </head>
-  <body class="p-0 text-slate-700 bg-slate-100 font-figtree">
+  <body class="p-0 text-slate-700 bg-slate-50 font-figtree">
     <% if (typeof user !== `undefined`) {%>
 
     <nav
@@ -25,19 +25,20 @@
     </nav>
 
     <div
-      class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-100"
+      class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-50"
     >
       <h1 class="text-center font-bold text-2xl md:text-3xl">
         Account Details
       </h1>
       <section
-        class="md:min-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
+        class="md:min-w-[500px] md:max-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
       >
         <div class="flex flex-col gap-y-6 w-full">
+          <h2 class="font-bold">Edit Account Information:</h2>
           <div class="flex flex-col gap-y-2">
             <label for="email">Email</label>
             <input
-              class="px-4 py-2 border border-slate-500 rounded-lg disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500"
+              class="px-4 py-2 border border-slate-500 rounded-lg disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500"
               required
               autocomplete="off"
               name="email"
@@ -68,7 +69,7 @@
               <button
                 disabled="false"
                 id="first-name-submit"
-                class="disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
+                class="disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
                 type="submit"
               >
                 Save
@@ -105,7 +106,7 @@
               <button
                 disabled="true"
                 id="last-name-submit"
-                class="disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
+                class="disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
                 type="submit"
               >
                 Save
@@ -171,7 +172,7 @@
               </div>
 
               <button
-                class="hidden disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
+                class="hidden disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
                 id="member-submit"
                 type="submit"
               >
@@ -238,7 +239,7 @@
               </div>
 
               <button
-                class="hidden disabled:pointer-events-none disabled:bg-slate-100 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
+                class="hidden disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
                 id="admin-submit"
                 type="submit"
               >
@@ -255,39 +256,88 @@
             </ul>
             <% } %>
           </form>
+
+          <div>
+            <form
+              id="change-password-form"
+              class="relative flex flex-col gap-y-2"
+              action="update-password"
+              method="post"
+            >
+              <div
+                class="mb-2 mt-4 w-full flex flex-row justify-between items-center"
+              >
+                <h2 class="font-bold">Change Password:</h2>
+                <button
+                  id="save-password"
+                  class="disabled:pointer-events-none disabled:bg-slate-50 disabled:text-slate-500 px-4 py-2 rounded-lg border border-slate-500 bg-slate-500 text-white"
+                  type="submit"
+                  disabled="true"
+                >
+                  Save
+                </button>
+              </div>
+              <div class="flex flex-col justify-between gap-y-2">
+                <label for="password">Old Password</label>
+                <input
+                  class="w-full px-4 py-2 border border-slate-500 rounded-lg"
+                  id="old-password"
+                  required
+                  autocomplete="off"
+                  name="password"
+                  type="password"
+                />
+              </div>
+
+              <div class="flex flex-col justify-between gap-y-2">
+                <label for="newPassword">New Password</label>
+                <input
+                  class="w-full px-4 py-2 border border-slate-500 rounded-lg"
+                  id="new-password"
+                  required
+                  autocomplete="off"
+                  name="newPassword"
+                  type="password"
+                />
+              </div>
+
+              <div class="flex flex-col justify-between gap-y-2">
+                <label for="confirm">Confirm Password</label>
+                <input
+                  class="w-full px-4 py-2 border border-slate-500 rounded-lg"
+                  required
+                  id="confirm-password"
+                  autocomplete="off"
+                  name="confirm"
+                  type="password"
+                />
+              </div>
+
+              <% if (typeof passwordMatch !== `undefined` || typeof
+              passwordErrors !== `undefined`) { %>
+              <ul class="text-red-600 font-semi-bold">
+                <% if (typeof passwordMatch !== `undefined`) { %> <% if
+                (passwordMatch === false) { %>
+                <li class="list-disc list-outside ml-3 md:ml-4">
+                  Incorrect user password... Please try again
+                </li>
+                <% } %> <% } %> <% if (typeof passwordErrors !== `undefined`) {
+                %> <% for (item of passwordErrors) { %>
+                <li class="list-disc list-outside ml-3 md:ml-4">
+                  <%= item.msg %>
+                </li>
+                <% } %> <% } %>
+              </ul>
+              <% } %>
+            </form>
+          </div>
         </div>
       </section>
     </div>
 
-    <div class="hidden">
-      <button id="password-toggle">Change Password</button>
-      <form id="change-password-form" class="hidden">
-        <div class="flex items-center gap-x-4">
-          <label for="password">Old Password</label>
-          <input required autocomplete="off" name="password" type="password" />
-        </div>
-
-        <div class="flex items-center gap-x-4">
-          <label for="new-password">New Password</label>
-          <input
-            required
-            autocomplete="off"
-            name="new-password"
-            type="password"
-          />
-        </div>
-
-        <div class="flex items-center gap-x-4">
-          <label for="confirm">Confirm Password</label>
-          <input required autocomplete="off" name="confirm" type="password" />
-        </div>
-        <button type="submit">Save</button>
-      </form>
-    </div>
-
     <% } else { %>
     <div
-      class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-100"
+      class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-50"
     >
       <h1 class="text-center font-bold text-2xl md:text-3xl">
         Members Only Forum

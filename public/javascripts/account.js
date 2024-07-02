@@ -64,22 +64,6 @@ adminToggle.addEventListener("click", () => {
   compareAdminInputValues();
 });
 
-//CHANGE PASSWORD FORM TOGGLE FUNCTIONALITY
-const passwordToggle = document.querySelector("#password-toggle");
-const changePasswordForm = document.querySelector("#change-password-form");
-
-const togglePasswordForm = () => {
-  if (changePasswordForm.classList.contains("hidden")) {
-    changePasswordForm.classList.remove("hidden");
-    passwordToggle.textContent = "Cancel";
-  } else {
-    changePasswordForm.classList.add("hidden");
-    passwordToggle.textContent = "Change Password";
-  }
-};
-
-passwordToggle.addEventListener("click", togglePasswordForm);
-
 //EDIT INFO FUNCTIONALITY
 const firstNameInput = document.querySelector("#first_name");
 const firstNameSubmit = document.querySelector("#first-name-submit");
@@ -143,3 +127,19 @@ toggleAdminVisibilityIcon.addEventListener(
   "click",
   toggleAdminPasswordVisbility
 );
+
+// CHANGE PASSWORD FUNCIONALITY
+const savePasswordBtn = document.querySelector("#save-password");
+const oldPasswordInput = document.querySelector("#old-password");
+const newPasswordInput = document.querySelector("#new-password");
+const confirmPasswordInput = document.querySelector("#confirm-password");
+
+const togglePasswordSave = () => {
+  if (savePasswordBtn.disabled === true) {
+    savePasswordBtn.disabled = false;
+  }
+};
+
+oldPasswordInput.addEventListener("input", togglePasswordSave);
+newPasswordInput.addEventListener("input", togglePasswordSave);
+confirmPasswordInput.addEventListener("input", togglePasswordSave);
