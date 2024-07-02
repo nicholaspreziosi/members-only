@@ -27,7 +27,7 @@
 
       <% if (user.member === false) { %>
       <div
-        class="bg-white p-6 flex flex-col gap-y-4 items-center justify-center text-sm text-center md:flex-row md:gap-x-4 flex-initial"
+        class="bg-white p-6 flex flex-col gap-y-4 items-center justify-center text-sm text-center md:flex-row md:gap-x-4 flex-initial text-base"
       >
         <p>Upgrade Membership Status to Create a Post:</p>
         <a
@@ -52,7 +52,7 @@
           <form
             action="/posts/create"
             method="POST"
-            class="flex flex-col gap-y-6 w-full"
+            class="flex flex-col gap-y-6 w-full text-base"
           >
             <div class="flex flex-col gap-y-2">
               <label for="title">Title</label>
@@ -112,7 +112,7 @@
           <form
             action="/log-in"
             method="POST"
-            class="flex flex-col gap-y-6 w-full"
+            class="flex flex-col gap-y-6 w-full text-base"
           >
             <div class="flex flex-col gap-y-2">
               <label for="email">Email</label>
@@ -136,7 +136,7 @@
               />
               <img
                 id="toggle-pw"
-                class="absolute bottom-1.5 right-2 w-6 cursor-pointer"
+                class="absolute bottom-2 right-2 w-6 cursor-pointer"
                 src="/images/eye.svg"
               />
             </div>

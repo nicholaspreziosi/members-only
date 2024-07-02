@@ -608,6 +608,14 @@ video {
   bottom: 2.5rem;
 }
 
+.right-\[92px\] {
+  right: 92px;
+}
+
+.top-\[66px\] {
+  top: 66px;
+}
+
 .m-6 {
   margin: 1.5rem;
 }
@@ -893,6 +901,11 @@ video {
   line-height: 1rem;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -975,6 +988,11 @@ video {
 }
 
 @media (min-width: 768px) {
+  .md\:mx-12 {
+    margin-left: 3rem;
+    margin-right: 3rem;
+  }
+
   .md\:ml-4 {
     margin-left: 1rem;
   }
@@ -1039,6 +1057,11 @@ video {
   .md\:py-16 {
     padding-top: 4rem;
     padding-bottom: 4rem;
+  }
+
+  .md\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 
   .md\:text-2xl {
