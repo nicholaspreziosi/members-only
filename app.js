@@ -411,10 +411,35 @@ app.post("/account/admin", [
 ]);
 
 // Handle post request on post delete
-app.post("/delete/:id", async (req, res, next) => {
-  const post = await Post.findByIdAndDelete(req.params.id);
-  res.redirect("/posts");
-});
+app.post("/delete/:id", [
+  // Validate and sanitize the admin password field.
+  body(
+    "delete-password",
+    "Incorrect admin password... Please try again"
+  ).equals(process.env.ADMIN_PASSWORD),
+  async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const posts = await Post.find({}, "title message time author")
+      .sort({ time: -1 })
+      .populate("author")
+      .exec();
+
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      res.render("index", {
+        user: req.user,
+        posts: posts,
+        formOpen: true,
+        deleteErrors: errors.array(),
+      });
+    } else {
+      const post = await Post.findByIdAndDelete(req.params.id);
+      res.redirect("/posts");
+    }
+  },
+]);
 
 // Handle log in on get
 app.get("/log-in", (req, res) => {

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link href="/stylesheets/output.css" rel="stylesheet" />
     <link href="/stylesheets/custom.css" rel="stylesheet" />
+    <script src="/javascripts/delete.js" defer></script>
 
     <script src="/javascripts/log-in.js" defer></script>
   </head>
@@ -63,17 +64,43 @@
                 </p>
                 <p><%= item.formattedDateTime %></p>
                 <% if (user.admin) {%>
+                  <div class="relative flex flex-col justify-center">
+                    <button class="open-delete-post-modal hover:underline">Delete</button>
+                    <form class="<%= typeof formOpen !== `undefined` ? `` : `hidden` %> delete-post-form absolute flex flex-col py-2 px-4 gap-y-2 rounded-lg bg-white text-slate-700 right-0 -top-[148px] md:-top-[104px] drop-shadow-lg" action="/delete/<%= item.id %>" method="post">
+                      <input type="hidden" name="<%= item.id %>" value="<%= item.id %>" />
+                      <div class="flex flex-row justify-between">
+                        <label class="invisible" for="delete-password">Admin Password</label>
+                        <div class="close-delete-post-modal cursor-pointer">X</div>
+                      </div>
+                      <div class="flex flex-col gap-y-2 md:flex-row md:gap-x-4">
+                        <div class="relative">
+                          <input autocomplete="off" class="delete-password-input w-fit text-sm px-4 py-2 border border-slate-500 rounded-lg" placeholder="Admin Password" type="password" name="delete-password" />
+                          <img
+                          class="toggle-delete-pw-visibility absolute bottom-1.5 right-2 w-6 cursor-pointer"
+                          src="/images/eye.svg"
+                        />
+                        </div>
+                                                <button class="whitespace-nowrap text-center px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition" type="submit">Confirm Delete</button>
+                      </div>
 
-                  <form action="/delete/<%= item.id %>" method="post">
-                    <input type="hidden" name="<%= item.id %>" value="<%= item.id %>" />
-                    <button type="submit">Delete</button>
-                  </form>
+                        <% if (typeof deleteErrors !== `undefined`) { %>
+                          <ul class="text-red-600 font-semi-bold">
+                          <% for (item of deleteErrors)
+                        { %>
+                        <li class="list-disc list-outside ml-3 md:ml-4 text-xs">
+                          <%= item.msg %>
+                        </li>
+                        <% } %>
+                        </ul>
+                        <% } %>
+                    </form>
+                  </div>
+
                 <%}%>
               </div>
             </div>
           </div>
         </div>
-
       <% }%>
       <% } else { %>
 

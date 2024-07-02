@@ -87,14 +87,18 @@
             >
               Submit
             </button>
-            <ul class="text-red-600 font-semi-bold">
-              <% if (typeof errors !== `undefined`) { %> <% for (item of errors)
+
+              <% if (typeof errors !== `undefined`) { %>
+                <ul class="text-red-600 font-semi-bold"></ul>
+                <% for (item of errors)
               { %>
               <li class="list-disc list-outside ml-3 md:ml-4">
                 <%= item.msg %>
               </li>
-              <% } %> <% } %>
+              <% } %>
             </ul>
+              <% } %>
+
           </form>
         </section>
       </div>
