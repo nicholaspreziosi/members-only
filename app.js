@@ -154,11 +154,15 @@ passport.use(
       try {
         const user = await User.findOne({ email: email });
         if (!user) {
-          return done(null, false, { message: "Incorrect username" });
+          return done(null, false, {
+            message: "Incorrect username... Please try again",
+          });
         }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
-          return done(null, false, { message: "Incorrect password" });
+          return done(null, false, {
+            message: "Incorrect password... Please try again",
+          });
         }
         return done(null, user);
       } catch (err) {
@@ -427,7 +431,6 @@ app.post("/delete/:id", [
       .exec();
 
     if (!errors.isEmpty()) {
-      console.log(errors);
       res.render("index", {
         user: req.user,
         posts: posts,
@@ -447,12 +450,37 @@ app.get("/log-in", (req, res) => {
 });
 
 // Handle log in on post
-app.post("/log-in", [
-  passport.authenticate("local", {
-    successRedirect: "/posts",
-    failureRedirect: "/posts",
-  }),
-]);
+app.post("/log-in", (req, res) => {
+  passport.authenticate(
+    "local",
+    { successRedirect: "/posts", failureRedirect: "/posts" },
+    async function (err, user, options) {
+      if (!user) {
+        res.render("index", {
+          user: req.user,
+          email: req.body.email,
+          loginErrors: options,
+        });
+        return;
+      } else {
+        req.login(user, async function (err) {
+          if (err) {
+            return next(err);
+          }
+          const posts = await Post.find({}, "title message time author")
+            .sort({ time: -1 })
+            .populate("author")
+            .exec();
+
+          res.render("index", {
+            user: req.user,
+            posts: posts,
+          });
+        });
+      }
+    }
+  )(req, res);
+});
 
 // Handle log out on get
 app.get("/log-out", (req, res, next) => {

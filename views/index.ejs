@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Members Only</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link href="/stylesheets/output.css" rel="stylesheet" />
     <link href="/stylesheets/custom.css" rel="stylesheet" />
@@ -47,98 +47,159 @@
         <div
           class="p-6 m-6 md:mx-12 flex flex-col gap-y-6 bg-slate-500 text-white rounded-xl drop-shadow-lg"
         >
-          <div class="w-full flex flex-row gap-x-6 justify-between items-center">
+          <div
+            class="w-full flex flex-row gap-x-6 justify-between items-center"
+          >
             <h2 class="font-bold text-xl"><%= item.title %></h2>
             <% if (!user.member) {%>
-              <a href="/account">
-                <img src="/images/lock.svg" class="w-5 h-5 cursor-pointer" />
-              </a>
-              <%}%>
+            <a href="/account">
+              <img src="/images/lock.svg" class="w-5 h-5 cursor-pointer" />
+            </a>
+            <%}%>
           </div>
-          <p class="text-base <%= !user.member ? `blur-sm` : `` %>"><%= item.message %></p>
+          <p class="text-base <%= !user.member ? `blur-sm select-none` : `` %>">
+            <%= item.message %>
+          </p>
           <div class="flex justify-end items-center gap-x-6">
             <div class="flex w-full md:justify-end items-center text-sm">
-              <div class="w-full md:w-fit flex justify-between md:gap-x-6 <%= !user.member ? `blur-sm` : `` %>">
+              <div
+                class="w-full md:w-fit flex justify-between md:gap-x-6 <%= !user.member ? `blur-sm select-none` : `` %>"
+              >
                 <p>
                   By <%= item.author.first_name %> <%= item.author.last_name %>
                 </p>
                 <p><%= item.formattedDateTime %></p>
                 <% if (user.admin) {%>
-                  <div class="relative flex flex-col justify-center">
-                    <button class="open-delete-post-modal hover:underline">Delete</button>
-                    <form class="<%= typeof formOpen !== `undefined` ? `` : `hidden` %> delete-post-form absolute flex flex-col py-2 px-4 gap-y-2 rounded-lg bg-white text-slate-700 right-0 -top-[148px] md:-top-[104px] drop-shadow-lg" action="/delete/<%= item.id %>" method="post">
-                      <input type="hidden" name="<%= item.id %>" value="<%= item.id %>" />
-                      <div class="flex flex-row justify-between">
-                        <label class="invisible" for="delete-password">Admin Password</label>
-                        <div class="close-delete-post-modal cursor-pointer">X</div>
+                <div class="relative flex flex-col justify-center">
+                  <button class="open-delete-post-modal hover:underline">
+                    Delete
+                  </button>
+                  <form
+                    class="<%= typeof formOpen !== `undefined` ? `` : `hidden` %> delete-post-form absolute flex flex-col py-2 px-4 gap-y-2 rounded-lg bg-white text-slate-700 right-0 -top-[148px] md:-top-[104px] drop-shadow-lg"
+                    action="/delete/<%= item.id %>"
+                    method="post"
+                  >
+                    <input
+                      type="hidden"
+                      name="<%= item.id %>"
+                      value="<%= item.id %>"
+                    />
+                    <div class="flex flex-row justify-between">
+                      <label class="invisible" for="delete-password"
+                        >Admin Password</label
+                      >
+                      <div class="close-delete-post-modal cursor-pointer">
+                        X
                       </div>
-                      <div class="flex flex-col gap-y-2 md:flex-row md:gap-x-4">
-                        <div class="relative">
-                          <input autocomplete="off" class="delete-password-input w-fit text-sm px-4 py-2 border border-slate-500 rounded-lg" placeholder="Admin Password" type="password" name="delete-password" />
-                          <img
+                    </div>
+                    <div class="flex flex-col gap-y-2 md:flex-row md:gap-x-4">
+                      <div class="relative">
+                        <input
+                          autocomplete="off"
+                          class="delete-password-input w-fit text-sm px-4 py-2 border border-slate-500 rounded-lg"
+                          placeholder="Admin Password"
+                          type="password"
+                          name="delete-password"
+                        />
+                        <img
                           class="toggle-delete-pw-visibility absolute bottom-1.5 right-2 w-6 cursor-pointer"
                           src="/images/eye.svg"
                         />
-                        </div>
-                                                <button class="whitespace-nowrap text-center px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition" type="submit">Confirm Delete</button>
                       </div>
+                      <button
+                        class="whitespace-nowrap text-center px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition"
+                        type="submit"
+                      >
+                        Confirm Delete
+                      </button>
+                    </div>
 
-                        <% if (typeof deleteErrors !== `undefined`) { %>
-                          <ul class="text-red-600 font-semi-bold">
-                          <% for (item of deleteErrors)
-                        { %>
-                        <li class="list-disc list-outside ml-3 md:ml-4 text-xs">
-                          <%= item.msg %>
-                        </li>
-                        <% } %>
-                        </ul>
-                        <% } %>
-                    </form>
-                  </div>
+                    <% if (typeof deleteErrors !== `undefined`) { %>
+                    <ul class="text-red-600 font-semi-bold">
+                      <% for (item of deleteErrors) { %>
+                      <li class="list-disc list-outside ml-3 md:ml-4 text-xs">
+                        <%= item.msg %>
+                      </li>
+                      <% } %>
+                    </ul>
+                    <% } %>
+                  </form>
+                </div>
 
                 <%}%>
               </div>
             </div>
           </div>
         </div>
-      <% }%>
+        <% } %>
+      </div>
       <% } else { %>
 
-        <div class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-50">
-          <h1 class="text-center font-bold text-2xl md:text-3xl">Members Only Forum</h1>
-          <section class="md:min-w-[500px] md:max-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg">
-            <h2 class="text-xl md:text-2xl">Log In</h2>
-            <form action="/log-in" method="POST" class="flex flex-col gap-y-6 w-full text-base">
-              <div class="flex flex-col gap-y-2">
-                <label for="email">Email</label>
-                <input autocomplete="off" name="email" placeholder="Email" type="text" class="px-4 py-2 border border-slate-500 rounded-lg focus:bg-white"/>
-              </div>
-
-              <div class="relative flex flex-col gap-y-2">
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" class="px-4 py-2 border border-slate-500 rounded-lg" placeholder="Password"/>
-                <img
-                  id="toggle-pw"
-                  class="absolute bottom-2 right-2 w-6 cursor-pointer"
-                  src="/images/eye.svg"
-                />
-              </div>
-
-              <button class="px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition"
-              >Log In</button>
-            </form>
-
-            <div class="w-full border-slate-500 border-t">
-
+      <div
+        class="p-6 md:px-8 py-8 md:py-16 gap-y-8 md:gap-y-16 w-full h-full flex flex-col justify-start items-center bg-slate-50"
+      >
+        <h1 class="text-center font-bold text-2xl md:text-3xl">
+          Members Only Forum
+        </h1>
+        <section
+          class="md:min-w-[500px] md:max-w-[500px] min-w-full p-6 md:p-8 bg-white flex flex-col gap-y-6 justify-center items-center text-sm drop-shadow-lg rounded-lg"
+        >
+          <h2 class="text-xl md:text-2xl">Log In</h2>
+          <form
+            action="/log-in"
+            method="POST"
+            class="flex flex-col gap-y-6 w-full text-base"
+          >
+            <div class="flex flex-col gap-y-2">
+              <label for="email">Email</label>
+              <input
+                autocomplete="off"
+                name="email"
+                placeholder="Email"
+                type="text"
+                class="px-4 py-2 border border-slate-500 rounded-lg focus:bg-white"
+                value="<%= typeof email === `undefined` ? `` : email %>"
+              />
             </div>
 
-            <div class="flex flex-row items-center gap-x-2 text-sm">
-              <p>Don't have an account?</p>
-              <a class="hover:underline" href="/sign-up">Sign Up</a>
+            <div class="relative flex flex-col gap-y-2">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                class="px-4 py-2 border border-slate-500 rounded-lg"
+                placeholder="Password"
+              />
+              <img
+                id="toggle-pw"
+                class="absolute bottom-2 right-2 w-6 cursor-pointer"
+                src="/images/eye.svg"
+              />
             </div>
 
-          </section>
-        </div>
+            <button
+              class="px-4 py-2 border border-slate-500 rounded-lg bg-slate-500 text-white hover:bg-white hover:text-slate-700 transition"
+            >
+              Log In
+            </button>
+            <% if (typeof loginErrors !== `undefined`) { %>
+            <ul class="text-red-600 font-semi-bold">
+              <li class="list-disc list-outside ml-3 md:ml-4 text-sm">
+                <%= loginErrors.message %>
+              </li>
+            </ul>
+            <% } %>
+          </form>
+
+          <div class="w-full border-slate-500 border-t"></div>
+
+          <div class="flex flex-row items-center gap-x-2 text-sm">
+            <p>Don't have an account?</p>
+            <a class="hover:underline" href="/sign-up">Sign Up</a>
+          </div>
+        </section>
+      </div>
 
       <%}%>
     </div>
