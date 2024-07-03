@@ -68,12 +68,16 @@ app.get("/", (req, res) => {
 
 // Handle get request on posts page
 app.get("/posts", async (req, res) => {
-  const posts = await Post.find({}, "title message time author")
-    .sort({ time: -1 })
-    .populate("author")
-    .exec();
+  if (req.user) {
+    const posts = await Post.find({}, "title message time author")
+      .sort({ time: -1 })
+      .populate("author")
+      .exec();
 
-  res.render("index", { user: req.user, posts: posts });
+    res.render("index", { user: req.user, posts: posts });
+  } else {
+    res.render("index", { user: req.user });
+  }
 });
 
 // Handle get request on sign up page
@@ -500,15 +504,7 @@ app.post("/log-in", (req, res) => {
           if (err) {
             return next(err);
           }
-          const posts = await Post.find({}, "title message time author")
-            .sort({ time: -1 })
-            .populate("author")
-            .exec();
-
-          res.render("index", {
-            user: req.user,
-            posts: posts,
-          });
+          res.redirect("/posts");
         });
       }
     }
