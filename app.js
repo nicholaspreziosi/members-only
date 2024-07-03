@@ -57,7 +57,13 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.SESSIONS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
@@ -504,7 +510,7 @@ app.post("/log-in", (req, res) => {
           if (err) {
             return next(err);
           }
-          res.redirect("/posts");
+          return res.redirect("/posts");
         });
       }
     }
