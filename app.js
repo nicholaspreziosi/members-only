@@ -8,9 +8,11 @@ const User = require("./models/user");
 const Post = require("./models/post");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-require("dotenv").config();
-const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+require("dotenv").config();
+const compression = require("compression");
+const helmet = require("helmet");
+const RateLimit = require("express-rate-limit");
 
 const mongoDb = process.env.MONGODB_URI;
 mongoose.connect(mongoDb);
@@ -18,6 +20,37 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
 const app = express();
+
+// Compress all routes
+app.use(compression());
+
+// Add helmet to the middleware chain.
+app.use(helmet());
+app.use(helmet.crossOriginEmbedderPolicy({ policy: "credentialless" }));
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    originAgentCluster: true,
+  })
+);
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      "img-src": ["'self'", "https:", "data:", "blob:"],
+    },
+  })
+);
+
+// Set up rate limiter: maximum of twenty requests per minute
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 200,
+  validate: { xForwardedForHeader: false },
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+app.set("trust proxy", 1);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
