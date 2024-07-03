@@ -1,11 +1,11 @@
 # Members Only App
 
-This members only app is an online forum where only members can view post details and create new posts while only admins can delete posts. Users can sign up for an account, log in and out, and update account details such as first name, last name, membership status, admin status, and password. To change membership and admin status and to delete posts, users must input the correct member and admin passwords.
+This members only app is an online forum where only members can create new posts/view post details and only admins can delete posts. Users can sign up for an account, log in and out, and update account details such as first name, last name, membership status, admin status, and password. To change membership/admin status and to delete posts, users must correctly input the respective member and admin passwords.
 
 The frontend of this application is built with EJS, JavaScript, and Tailwind CSS, and the backend is built with Node.js, Express, MongoDB, and Mongoose. Authentication is powered by Passport.js and secured by bcryptjs, and all forms are validated with express-validator.
 
 <p align="center">
-    <a href="">
+    <a href="https://members-only-forum.fly.dev/posts">
         <img
             src="./public/images/membersonly.jpg"
             alt="Members Only App Preview">
@@ -68,4 +68,4 @@ The frontend of this application is built with EJS, JavaScript, and Tailwind CSS
 
 ## Live Demo
 
-View a live demo [here]().
+View a live demo [here](https://members-only-forum.fly.dev/posts).
