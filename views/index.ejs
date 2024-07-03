@@ -3,11 +3,11 @@
   <head>
     <title>Members Only</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link href="/stylesheets/output.css" rel="stylesheet" />
     <link href="/stylesheets/custom.css" rel="stylesheet" />
     <script src="/javascripts/delete.js" defer></script>
-
     <script src="/javascripts/log-in.js" defer></script>
   </head>
   <body class="p-0 text-slate-700 bg-slate-50 font-figtree">
@@ -75,7 +75,7 @@
                     Delete
                   </button>
                   <form
-                    class="<%= typeof formOpen !== `undefined` ? `` : `hidden` %> delete-post-form absolute flex flex-col py-2 px-4 gap-y-2 rounded-lg bg-white text-slate-700 right-0 -top-[148px] md:-top-[104px] drop-shadow-lg"
+                    class="<%= (typeof formOpen !== `undefined` && deletePostId === item.id) ? `` : `hidden` %> delete-post-form absolute flex flex-col py-2 px-4 gap-y-2 rounded-lg bg-white text-slate-700 right-0 -top-[148px] md:-top-[104px] drop-shadow-lg"
                     action="/delete/<%= item.id %>"
                     method="post"
                   >
@@ -114,11 +114,12 @@
                       </button>
                     </div>
 
-                    <% if (typeof deleteErrors !== `undefined`) { %>
+                    <% if (typeof deleteErrors !== `undefined` && deletePostId
+                    === item.id) { %>
                     <ul class="text-red-600 font-semi-bold">
-                      <% for (item of deleteErrors) { %>
+                      <% for (error of deleteErrors) { %>
                       <li class="list-disc list-outside ml-3 md:ml-4 text-xs">
-                        <%= item.msg %>
+                        <%= error.msg %>
                       </li>
                       <% } %>
                     </ul>

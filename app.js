@@ -62,6 +62,7 @@ app.use(
     secret: process.env.SESSIONS_SECRET,
     resave: false,
     saveUninitialized: true,
+    maxAge: 3600000, //1 hour
   })
 );
 app.use(passport.session());
@@ -477,6 +478,7 @@ app.post("/delete/:id", [
       res.render("index", {
         user: req.user,
         posts: posts,
+        deletePostId: req.params.id,
         formOpen: true,
         deleteErrors: errors.array(),
       });
