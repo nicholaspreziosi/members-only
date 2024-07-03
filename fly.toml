@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for members-only-bitter-sky-1233 on 2024-07-02T20:36:10-04:00
+# fly.toml app configuration file generated for members-only-forum on 2024-07-02T20:57:18-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'members-only-bitter-sky-1233'
+app = 'members-only-forum'
 primary_region = 'ewr'
 
 [build]
