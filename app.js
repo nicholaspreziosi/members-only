@@ -101,15 +101,14 @@ app.post("/sign-up", [
   // Validate fields
   body("first_name", "First name must contain at least 2 characters")
     .trim()
-    .isLength({ min: 2, max: 35 })
-    .escape(),
+    .isLength({ min: 2, max: 35 }),
   body("last_name", "Last name must contain at least 2 characters")
     .trim()
-    .isLength({ min: 2, max: 35 })
-    .escape(),
-  body("email", "Email must be in valid format (Ex. email@website.com)")
-    .isEmail()
-    .escape(),
+    .isLength({ min: 2, max: 35 }),
+  body(
+    "email",
+    "Email must be in valid format (Ex. email@website.com)"
+  ).isEmail(),
   body(
     "password",
     "Password must be at least 8 characters and have one uppercase letter, one lowercase letter, one number, and one special character"
@@ -253,15 +252,13 @@ app.post("/posts/create", [
     "Title must contain at least 2 characters and no more than 200 characters"
   )
     .trim()
-    .isLength({ min: 2, max: 200 })
-    .escape(),
+    .isLength({ min: 2, max: 200 }),
   body(
     "message",
     "Message must contain at least 2 characters and no more than 1000 characters"
   )
     .trim()
-    .isLength({ min: 2, max: 1000 })
-    .escape(),
+    .isLength({ min: 2, max: 1000 }),
 
   async (req, res, next) => {
     // Extract the validation errors from a request.
@@ -292,8 +289,7 @@ app.post("/update/first-name", [
   // Validate and sanitize the first name field.
   body("first_name", "First name must contain at least 2 characters")
     .trim()
-    .isLength({ min: 2, max: 35 })
-    .escape(),
+    .isLength({ min: 2, max: 35 }),
 
   async (req, res, next) => {
     // Extract the validation errors from a request.
@@ -320,8 +316,7 @@ app.post("/update/last-name", [
   // Validate and sanitize the last name field.
   body("last_name", "Last name must contain at least 2 characters")
     .trim()
-    .isLength({ min: 2, max: 35 })
-    .escape(),
+    .isLength({ min: 2, max: 35 }),
 
   async (req, res, next) => {
     // Extract the validation errors from a request.
