@@ -13,6 +13,7 @@ require("dotenv").config();
 const compression = require("compression");
 const helmet = require("helmet");
 const RateLimit = require("express-rate-limit");
+const asyncHandler = require("express-async-handler");
 
 const mongoDb = process.env.MONGODB_URI;
 mongoose.connect(mongoDb);
@@ -74,18 +75,21 @@ app.get("/", (req, res) => {
 });
 
 // Handle get request on posts page
-app.get("/posts", async (req, res) => {
-  if (req.user) {
-    const posts = await Post.find({}, "title message time author")
-      .sort({ time: -1 })
-      .populate("author")
-      .exec();
+app.get(
+  "/posts",
+  asyncHandler(async (req, res, next) => {
+    if (req.user) {
+      const posts = await Post.find({}, "title message time author")
+        .sort({ time: -1 })
+        .populate("author")
+        .exec();
 
-    res.render("index", { user: req.user, posts: posts });
-  } else {
-    res.render("index", { user: req.user });
-  }
-});
+      res.render("index", { user: req.user, posts: posts });
+    } else {
+      res.render("index", { user: req.user });
+    }
+  })
+);
 
 // Handle get request on sign up page
 app.get("/sign-up", (req, res) => {
@@ -125,7 +129,7 @@ app.post("/sign-up", [
     }
   }),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
     const userExists = await User.findOne({ email: req.body.email });
@@ -183,7 +187,7 @@ app.post("/sign-up", [
         }
       }
     });
-  },
+  }),
 ]);
 
 // Set up passport local strategy
@@ -260,7 +264,7 @@ app.post("/posts/create", [
     .trim()
     .isLength({ min: 2, max: 1000 }),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -281,7 +285,7 @@ app.post("/posts/create", [
       const result = await post.save();
       res.redirect("/posts");
     }
-  },
+  }),
 ]);
 
 // Handle post request on account page for first name update
@@ -291,7 +295,7 @@ app.post("/update/first-name", [
     .trim()
     .isLength({ min: 2, max: 35 }),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -308,7 +312,7 @@ app.post("/update/first-name", [
       await user.save();
       res.redirect("/account");
     }
-  },
+  }),
 ]);
 
 // Handle post request on account page for last name update
@@ -318,7 +322,7 @@ app.post("/update/last-name", [
     .trim()
     .isLength({ min: 2, max: 35 }),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -335,7 +339,7 @@ app.post("/update/last-name", [
       await user.save();
       res.redirect("/account");
     }
-  },
+  }),
 ]);
 
 // Handle post request on account page for change password upate
@@ -358,7 +362,7 @@ app.post("/update-password", [
     }
   }),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -391,7 +395,7 @@ app.post("/update-password", [
         passwordMatch: match,
       });
     }
-  },
+  }),
 ]);
 
 // Handle post request on account page for member update
@@ -401,7 +405,8 @@ app.post("/account/member", [
     "member-password",
     "Incorrect member password... Please try again"
   ).equals(process.env.MEMBER_PASSWORD),
-  async (req, res, next) => {
+
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -422,7 +427,7 @@ app.post("/account/member", [
       await user.save();
       res.redirect("/account");
     }
-  },
+  }),
 ]);
 
 // Handle post request on admin update
@@ -432,7 +437,7 @@ app.post("/account/admin", [
     process.env.ADMIN_PASSWORD
   ),
 
-  async (req, res, next) => {
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -450,7 +455,7 @@ app.post("/account/admin", [
       await user.save();
       res.redirect("/account");
     }
-  },
+  }),
 ]);
 
 // Handle post request on post delete
@@ -460,7 +465,8 @@ app.post("/delete/:id", [
     "delete-password",
     "Incorrect admin password... Please try again"
   ).equals(process.env.ADMIN_PASSWORD),
-  async (req, res, next) => {
+
+  asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -481,7 +487,7 @@ app.post("/delete/:id", [
       const post = await Post.findByIdAndDelete(req.params.id);
       res.redirect("/posts");
     }
-  },
+  }),
 ]);
 
 // Handle log in on get
