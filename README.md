@@ -2,7 +2,7 @@
 
 This members only app is an online forum where only members can create new posts/view post details and only admins can delete posts. Users can sign up for an account, log in and out, and update account details such as first name, last name, membership status, admin status, and password. To change membership/admin status and to delete posts, users must correctly input the respective member and admin passwords.
 
-The frontend of this application is built with EJS, JavaScript, and Tailwind CSS, and the backend is built with Node.js, Express, MongoDB, and Mongoose. Authentication is powered by Passport.js and secured by bcryptjs, and all forms are validated with express-validator.
+The frontend of this application is built with EJS, JavaScript, and Tailwind CSS, and the backend is built with Node.js, Express, and PostgreSQL. Authentication is implemented using Passport.js and secured by bcryptjs. All forms are validated with express-validator.
 
 <p align="center">
     <a href="https://members-only-forum.fly.dev/posts">
@@ -49,12 +49,8 @@ The frontend of this application is built with EJS, JavaScript, and Tailwind CSS
         Express
     </li>
     <li>
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" width="auto" height="25" alt="MongoDB Powered" title="MongoDB Powered"/>
-        MongoDB
-    </li>
-    <li>
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongoose/mongoose-original.svg" width="auto" height="25" alt="Mongoose Powered" title="Mongoose Powered"/>
-        Mongoose
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" width="auto" height="25" alt="PostgreSQL Powered" title="PostgreSQL Powered"/>
+        PostgreSQL
     </li>
     <li>
         <img src="./public/images/passportjs.png" width="auto" height="25" alt="Passport.js Powered" title="Passport.js Powered"/>
