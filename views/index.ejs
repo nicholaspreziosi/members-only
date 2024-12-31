@@ -50,7 +50,7 @@
           <div
             class="w-full flex flex-row gap-x-6 justify-between items-center"
           >
-            <h2 class="font-bold text-xl"><%= item.title %></h2>
+            <h2 class="font-bold text-xl"><%= item.title %> <%= item.id %></h2>
             <% if (!user.member) {%>
             <a href="/account">
               <img src="/images/lock.svg" class="w-5 h-5 cursor-pointer" />
@@ -65,10 +65,8 @@
               <div
                 class="w-full md:w-fit flex justify-between md:gap-x-6 <%= !user.member ? `blur-sm select-none` : `` %>"
               >
-                <p>
-                  By <%= item.author.first_name %> <%= item.author.last_name %>
-                </p>
-                <p><%= item.formattedDateTime %></p>
+                <p>By <%= item.first_name %> <%= item.last_name %></p>
+                <p><%= item.time.toUTCString() %></p>
                 <% if (user.admin) {%>
                 <div class="relative flex flex-col justify-center">
                   <button class="open-delete-post-modal hover:underline">

@@ -4,9 +4,6 @@ const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const User = require("./models/user");
-const Post = require("./models/post");
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
@@ -14,11 +11,7 @@ const compression = require("compression");
 const helmet = require("helmet");
 const RateLimit = require("express-rate-limit");
 const asyncHandler = require("express-async-handler");
-
-const mongoDb = process.env.MONGODB_URI;
-mongoose.connect(mongoDb);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongo connection error"));
+const queries = require("./db/queries");
 
 const app = express();
 
@@ -79,11 +72,7 @@ app.get(
   "/posts",
   asyncHandler(async (req, res, next) => {
     if (req.user) {
-      const posts = await Post.find({}, "title message time author")
-        .sort({ time: -1 })
-        .populate("author")
-        .exec();
-
+      const posts = await queries.getPosts();
       res.render("index", { user: req.user, posts: posts });
     } else {
       res.render("index", { user: req.user });
@@ -132,7 +121,8 @@ app.post("/sign-up", [
   asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-    const userExists = await User.findOne({ email: req.body.email });
+    const userExists = await queries.findUserByEmail(req.body.email);
+
     if (!errors.isEmpty()) {
       if (userExists) {
         res.render("sign-up-form", {
@@ -172,15 +162,15 @@ app.post("/sign-up", [
       // otherwise, store hashedPassword in DB
       else {
         try {
-          const user = new User({
+          const user = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email,
             password: hashedPassword,
             member: false,
             admin: false,
-          });
-          const result = await user.save();
+          };
+          await queries.createUser(user);
           res.redirect("/posts");
         } catch (err) {
           return done(err);
@@ -199,7 +189,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email: email });
+        const user = await queries.findUserByEmail(email);
         if (!user) {
           return done(null, false, {
             message: "Incorrect username... Please try again",
@@ -226,7 +216,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await queries.findUserById(id);
     done(null, user);
   } catch (err) {
     done(err);
@@ -276,13 +266,13 @@ app.post("/posts/create", [
         errors: errors.array(),
       });
     } else {
-      const post = new Post({
+      const post = {
         title: req.body.title,
         message: req.body.message,
         time: Date.now(),
         author: req.user.id,
-      });
-      const result = await post.save();
+      };
+      await queries.createPost(post);
       res.redirect("/posts");
     }
   }),
@@ -307,9 +297,7 @@ app.post("/update/first-name", [
       });
       return;
     } else {
-      const user = await User.findById(req.user.id);
-      user.first_name = req.body.first_name;
-      await user.save();
+      await queries.updateUserFirstName(req.body.first_name, req.user.id);
       res.redirect("/account");
     }
   }),
@@ -334,9 +322,7 @@ app.post("/update/last-name", [
       });
       return;
     } else {
-      const user = await User.findById(req.user.id);
-      user.last_name = req.body.last_name;
-      await user.save();
+      await queries.updateUserLastName(req.body.last_name, req.user.id);
       res.redirect("/account");
     }
   }),
@@ -365,8 +351,7 @@ app.post("/update-password", [
   asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-
-    const user = await User.findById(req.user.id);
+    const user = await queries.findUserById(req.user.id);
     const match = await bcrypt.compare(req.body.password, user.password);
 
     if (errors.isEmpty() && match) {
@@ -379,8 +364,7 @@ app.post("/update-password", [
         // otherwise, store hashedPassword in DB
         else {
           try {
-            user.password = hashedPassword;
-            await user.save();
+            await queries.updateUserPassword(hashedPassword, req.user.id);
             res.redirect("/account");
           } catch (err) {
             return done(err);
@@ -418,13 +402,11 @@ app.post("/account/member", [
       });
       return;
     } else {
-      const user = await User.findById(req.user.id);
       var isTrue = req.body.member === "true";
       if (isTrue === false) {
-        user.admin = false;
+        await queries.updateUserAdmin(false, req.user.id);
       }
-      user.member = isTrue;
-      await user.save();
+      await queries.updateUserMember(isTrue, req.user.id);
       res.redirect("/account");
     }
   }),
@@ -449,10 +431,8 @@ app.post("/account/admin", [
       });
       return;
     } else {
-      const user = await User.findById(req.user.id);
       var isTrue = req.body.admin === "true";
-      user.admin = isTrue;
-      await user.save();
+      await queries.updateUserAdmin(isTrue, req.user.id);
       res.redirect("/account");
     }
   }),
@@ -469,22 +449,18 @@ app.post("/delete/:id", [
   asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-
-    const posts = await Post.find({}, "title message time author")
-      .sort({ time: -1 })
-      .populate("author")
-      .exec();
+    const posts = await queries.getPosts();
 
     if (!errors.isEmpty()) {
       res.render("index", {
         user: req.user,
         posts: posts,
-        deletePostId: req.params.id,
+        deletePostId: Number(req.params.id),
         formOpen: true,
         deleteErrors: errors.array(),
       });
     } else {
-      const post = await Post.findByIdAndDelete(req.params.id);
+      await queries.deletePost(Number(req.params.id));
       res.redirect("/posts");
     }
   }),
@@ -496,29 +472,33 @@ app.get("/log-in", (req, res) => {
 });
 
 // Handle log in on post
-app.post("/log-in", (req, res) => {
-  passport.authenticate(
-    "local",
-    { successRedirect: "/posts", failureRedirect: "/posts" },
-    async function (err, user, options) {
-      if (!user) {
-        res.render("index", {
-          user: req.user,
-          email: req.body.email,
-          loginErrors: options,
-        });
-        return;
-      } else {
-        req.login(user, async function (err) {
-          if (err) {
-            return next(err);
-          }
-          return res.redirect("/posts");
-        });
+app.post(
+  "/log-in",
+
+  asyncHandler((req, res, next) => {
+    passport.authenticate(
+      "local",
+      { successRedirect: "/posts", failureRedirect: "/posts" },
+      async function (err, user, options) {
+        if (!user) {
+          res.render("index", {
+            user: req.user,
+            email: req.body.email,
+            loginErrors: options,
+          });
+          return;
+        } else {
+          req.login(user, async function (err) {
+            if (err) {
+              return next(err);
+            }
+            return res.redirect("/posts");
+          });
+        }
       }
-    }
-  )(req, res);
-});
+    )(req, res);
+  })
+);
 
 // Handle log out on get
 app.get("/log-out", (req, res, next) => {
